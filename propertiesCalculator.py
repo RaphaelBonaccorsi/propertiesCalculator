@@ -3,7 +3,7 @@
 #epsilon_HOMO
 #epsilon_LUMO
 #m_tot = number of unpaired electrons
-# v2.0
+# v2.1
 import math
 import os
 
@@ -19,9 +19,36 @@ if os.path.isfile("geometry.in"): #Check if the geometry file exists
                 specie = line.split()[4]
                 atom[nAtom] = coord, specie
                 nAtom += 1
+    if nAtom == 2:
+        print("d"+str(0)+": "+ str(math.dist(atom.get(0)[0], atom.get(1)[0]) ) )
+    elif nAtom == 3:
+        print("d"+str(0)+": "+ str(math.dist(atom.get(0)[0], atom.get(1)[0]) ) )
+        print("d"+str(0)+": "+ str(math.dist(atom.get(1)[0], atom.get(2)[0]) ) )
+    elif nAtom > 3:
+        dist = list()
+        for i in range(len(atom.keys())):
+            for l in range(len(atom.keys())):
+                if i > l:
+                    dist.append(math.dist(atom.get(i)[0], atom.get(l)[0]))
+        dist.sort()
+        #print(dist)
+        #print(len(dist))
+        threshold = dist[0] * 1.2 # Defines a limited distance to consider a bond between the atoms
+        sumD = float()
+        sumBond = 0
+        for d in dist:
+            if d < threshold:
+                if sumD == 0: # sumD will be 0 in the first loop
+                    sumD = d
+                    sumBond += 1
+                else:
+                    sumD += d
+                    sumBond += 1
 
-    for i in range(len(atom.keys()) - 1):
-        print("d"+str(i)+": "+ str(math.dist(atom.get(i)[0], atom.get(i+1)[0]) ) )
+        print("Dav: "+str(sumD/sumBond))
+        print("Average ECN: "+str(sumBond/len(atom.keys())))
+    #for i in range(len(atom.keys()) - 1):
+    #    print("d"+str(i)+": "+ str(math.dist(atom.get(i)[0], atom.get(i+1)[0]) ) )
 else:
     print("No geometry file found, proceeding to other calculations")
 
