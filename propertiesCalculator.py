@@ -1,8 +1,3 @@
-#d0 = bond length; geometry.in 
-#E_b = (E_tot^M2 - 2*E_tot^free-atom)/2.0 
-#epsilon_HOMO
-#epsilon_LUMO
-#m_tot = number of unpaired electrons
 # v2.1
 import math
 import os
@@ -31,8 +26,6 @@ if os.path.isfile("geometry.in"): #Check if the geometry file exists
                 if i > l:
                     dist.append(math.dist(atom.get(i)[0], atom.get(l)[0]))
         dist.sort()
-        #print(dist)
-        #print(len(dist))
         threshold = dist[0] * 1.2 # Defines a limited distance to consider a bond between the atoms
         sumD = float()
         sumBond = 0
@@ -47,8 +40,6 @@ if os.path.isfile("geometry.in"): #Check if the geometry file exists
 
         print("Dav: "+str(sumD/sumBond))
         print("Average ECN: "+str(sumBond/len(atom.keys())))
-    #for i in range(len(atom.keys()) - 1):
-    #    print("d"+str(i)+": "+ str(math.dist(atom.get(i)[0], atom.get(i+1)[0]) ) )
 else:
     print("No geometry file found, proceeding to other calculations")
 
@@ -78,5 +69,4 @@ try:
     print(aimsStr[inicio:fim])
 except:
     print("No aims.out file found!!!")
-
 
